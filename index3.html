@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+ <link rel="stylesheet" href="index2.css">
+ <link rel="stylesheet" href="ark.css">
+</head>
+<body>
+<div class="header">
+  <h2 class="logo">Chat</h2>
+  <input type="checkbox" id="chk">
+  <label for="chk" class="hide-menu-btn">
+      <i class="fas fa-ellipsis-h"></i>
+  </label>
+
+  <ul class="menu">
+    <a href="index2.html">Heim</a>
+    <a href="index3.html">Chat</a>
+    <a href="index4.html">Informasjonstryggleik</a>
+    <a href="index5.html">Regelverk</a>
+  </ul>
+</div>
+<div class="content"></div>
+  <img src="fjellbakgrunn.jpg" alt="" class="center">
+  <main class="main-content">
+
+      <section class="ark">
+          <section>
+
+              <form id="skjema">
+      
+                  <input type="text" id="inpAvsender" required placeholder="Hvem er du?">
+                  
+                  <input type="text" id="inpMening" required placeholder="Hva sier du?">
+                  
+                  <button type="submit" class="button">OK</button>
+                  
+                  </form>
+                  
+                  <article id="txtMeldinger"></article>
+      
+          </section>
+      </section>
+      <section class="ark"></section>
+    </main>
+
+    
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/4.9.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDf12aZXIhfGhyPpcRuZufGNx3v8O2C4SA",
+    authDomain: "prosjekt3-cdacb.firebaseapp.com",
+    databaseURL: "https://prosjekt3-cdacb.firebaseio.com",
+    projectId: "prosjekt3-cdacb",
+    storageBucket: "prosjekt3-cdacb.appspot.com",
+    messagingSenderId: "874457241196",
+    appId: "1:874457241196:web:c43ff178e9ed13f3"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<script>
+
+    let database = firebase.database();
+    
+    let meldinger = database.ref("meldinger");
+    
+    let skjema = document.getElementById("skjema");
+    
+    let inpAvsender = document.getElementById("inpAvsender");
+    
+    let inpMening = document.getElementById("inpMening");
+    
+    let txtMeldinger = document.getElementById("txtMeldinger");
+    
+    function visMelding(snapshot) {
+    
+    let melding = snapshot.val();
+    
+    let meldingTekst = `<p>
+    
+    <b>${melding.avsender}: </b>
+    
+    <i>${melding.tekst}</i>
+    
+    </p>`;
+    
+    txtMeldinger.innerHTML = txtMeldinger.innerHTML + meldingTekst;
+    
+    }
+    
+    function regNyMelding(evt) {
+    
+    evt.preventDefault();
+    
+    let nyMelding = {
+    
+    avsender: inpAvsender.value,
+    
+    tekst: inpMening.value
+    
+    };
+    
+    meldinger.push(nyMelding);
+    
+    inpMening.value = "";
+    
+    }
+    
+    meldinger.on("child_added", visMelding);
+    
+    skjema.onsubmit = regNyMelding;
+    
+    </script>
+</body>
+</html>
